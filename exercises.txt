@@ -1,0 +1,250 @@
+sessions and cookies
+
+authentication
+
+18-22, 25, 26, 28, 29-31
+
+UDEMY:
+usman@wimetrix.com
+12qweASD
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.youtube.com/watch?v=7giZGFDGnkc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_
+https://www.youtube.com/watch?v=_OZVJpLHUaI&list=PL55RiY5tL51poFMpbva1IqfO-pylwSNsN
+https://www.youtube.com/watch?v=TDe7DRYK8vU
+
+Cookies:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+
+Sequelize:
+https://sequelize.org/
+
+Prisma:
+https://www.prisma.io/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+COOKIES > Stored on the client side.
+SESSIONS > Stored on the server side.
+
+To set Cookies:
+
+router.post('/', function (req, res) {
+  res.setHeader('Set-Cookie', 'loggedIn = true; HTTPOnly');
+  res.write("POST Login Route Working!");
+  res.send();
+});
+
+To implement Sessions:
+
+Install express-session package.
+Import express-session into the server.
+    [const session = require('express-session');]
+Set out application to make use of this package,
+    [app.use(session());]
+Pass an object to the function which includes configuration details for our session.
+    [
+    app.use(session({
+        secret: '3r0398nqruq3vn0r3qu09nvrqur309nvq3rn',
+        resave: false,
+        saveUninitialized: false,
+    }));
+    ]
+    
+Login PORT Route After Addition Of Sessions And Cookies:
+    router.post('/', function (req, res) {
+    res.setHeader('Set-Cookie', 'loggedIn = true; HTTPOnly');
+    req.session.isWorking = true;
+    res.write("POST Login Route Working!");
+    console.log(req.session);
+    res.send();
+    });
+
+Deleting/Destroying Cookies:
+
+To delete/destoy a Cookie, we create a new Logout Route.
+Inside this Route we can delete/destory a Cookie and redirect the user to the landing page.
+[
+const express = require('express');
+const router = express.Router();
+
+router.post('/', (req, res) => {
+  req.session.destroy(function(err) {
+    console.log("Session Destroyed!");
+    console.log(err)
+  });
+  res.write("Logout POST Route Working!");
+  res.send();
+});
+
+module.exports = router;
+]
+Over here, the lines:
+    [
+        req.session.destroy(function(err) {
+        console.log("Session Destroyed!");
+        console.log(err)
+        });
+    ]
+Destroy the Cookies. We make a function call to catch any errors if they occur.
+
+Saving Session Information To DB Before Redirect:
+
+To make sure that Sesion Informationis saved to the database before the user is redirected, we can include the following code where the Session/Cookie information is pushed to the database:
+req.session.save(err => {
+    console.log(err);
+    res.redirect('/);
+});
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+GIT:
+
+git init > Initialize git repository in the current directory.
+
+git add [filename] > Adds this particular file to the final commit queue.
+
+git add . > Adds all the files in the current dorectory to the commit queue.
+
+git status > Provides the status of the current git repository.
+
+git commit -m "name" > Commit changes to repository and name the changes.
+
+git log > Provides a log of all commits to the repository.
+
+git checkout [commit_id] > Go back to a previous commit.
+
+git reset --hard [commit_id] > Revert staged changes.
+
+git checkout -- .
+
+git checkout -b [name] > Creates a new branch with the specified name.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+URL ENCODED:
+https://medium.com/@mmajdanski/express-body-parser-and-why-may-not-need-it-335803cd048c
+
+VALIDATION:
+
+Joi > Package for backend validation in Express.js.
+
+npm install express-validator
+
+INDEX.JS:
+const joi = require('joi');
+
+Joi is a schema based validation package.
+We first create a schema that is used to validate data on post requests.
+
+LOGIN.JS:
+const joi = require("joi");
+
+const validationSchema = joi.object({
+  username: joi.string().required().min(8).max(20),
+  password: joi.string().required().min(12).max(20)
+});
+
+router.post('/', async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try{
+    const validationResult = await validationSchema.validateAsync({ username: username, password:password });
+  }
+
+  catch(error){
+    console.log(error);
+    res.write(error.details[0].message);
+  }
+
+
+  //console.log(error.details[0].message);
+  console.log(req.body.username);
+  console.log(req.body.password);
+
+  res.send();
+});
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ERROR HANDLING:
+
+We can create custom erros using the throw command:
+
+i.e. throw new Error('Invalid Syntax.');
+
+TRY/CATCH BLOCKS:
+try{
+    do something here.
+}
+catch(error){
+    do something with the error.
+}
+
+THEN/CATCH BLOCKS:
+.then{
+    do something here.
+}
+.catch(error){
+    do something with the error.
+}
+
+TRY/CATCH > Commonly used for synchronous code.
+THEN/CATCH > Commonly used for asynchronous code.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+REST API:
+
+HTTP Methods:
+
+GET, POST > Limited to browsers.
+
+GET > Retrieve a resource from the server.
+
+POST > Create a resource on the server.
+
+PUT > Ammend/Edit a resource on the server.
+
+PATCH > Update parts of a resource on the server (not completely edit it).
+
+DELETE > Delete a resource on the server.
+
+OPTIONS > Determines whether follow-up requests are needed or not. This is sent automatically.
+
+Example REST API Response:
+
+router.get("/", (req, res, next) => {
+  res.status(200).json(
+    {
+      names: [{'name-1'}, {'name-2'}]
+    }    
+  );
+});
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CORS:
+
+Stands for Cross Origion resource Sharing.
+
+Used to allow a back-end application to connect to and communicate with a front-end application when both are locateed on different servers.
+
+To enabe CORS:
+
+app.use((req, res, next) =>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('access-control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+});
+
+res.setHeader('access-control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE'); > This Header determines which HTTP mehods are going to be allowed via the CORS policy.
+
+res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); > Determines which Headers the client is allowed to attach to the incoming requeets.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MySQL:
+
