@@ -1,0 +1,3 @@
+start sql:
+
+mysql -u root -p
